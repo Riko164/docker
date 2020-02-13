@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+  proxy:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - adsis
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${root}
+      MYSQL_DATABASE: ${host}
+      MYSQL_USER: ${user}
+      MYSQL_PASSWORD: ${pass}
+    networks:
+      - adsis
+
+  wp:
+    image: wordpress
+    networks:
+      - adsis
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=${pmauser}
+      - PMA_ARBITRARY=1
+    ports:
+      - 8080:80
+    networks:
+      - adsis
+
+networks:
+  adsis:
+
+
+
+
